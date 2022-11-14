@@ -1,0 +1,29 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-status-check
+          uri: lb://users-service
+          predicates:
+#            - Path=/users-service/users/status/check   # This is the same to locator.enabled=true
+            - Path=/users/status/check
+            - Method=GET
+#            More predicates at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gateway-request-predicates-factories
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+#            More filters at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
+#            https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
+#            https://cloud.spring.io/spring-cloud-gateway/reference/html/#httpheadersfilters
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8010/eureka
