@@ -43,6 +43,14 @@
         </dependency>
         <!-- Utility } -->
 
+        <!-- Fix netty resolver dns on Mac M1 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <version>4.1.85.Final</version>
+            <classifier>osx-aarch_64</classifier>
+        </dependency>
+
         <!-- { JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
