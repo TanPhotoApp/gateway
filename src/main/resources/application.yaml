@@ -9,14 +9,39 @@ spring:
         - id: user-status-check
           uri: lb://users-service
           predicates:
-#            - Path=/users-service/users/status/check   # This is the same to locator.enabled=true
-            - Path=/users/status/check
+            - Path=/users-service/users/status/check
             - Method=GET
-#            More predicates at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gateway-request-predicates-factories
+            - Header=Authorization, Bearer (.*)
           filters:
-#            More filters at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
             - RemoveRequestHeader=Cookie
-#            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        - id: user-service-signup
+          uri: lb://users-service
+          predicates:
+            - Path=/users-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+        - id: user-service-login
+          uri: lb://users-service
+          predicates:
+            - Path=/users-service/users/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+        - id: user-service-get-update-delete
+          uri: lb://users-service
+          predicates:
+            - Path=/users-service/users
+            - Method=GET,PUT,DELETE
+            - Header=Authorization, Bearer (.*)
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 #      discovery:
 #        locator:
 #          enabled: true
@@ -27,3 +52,6 @@ eureka:
       defaultZone: http://localhost:8010/eureka
   instance:
     prefer-ip-address: true
+
+token:
+  signingKey: als7fa9sulkajJWEjri23rlaslkdjfaksjdfl;jasfjaksjfkaj23oj2lj34l2
