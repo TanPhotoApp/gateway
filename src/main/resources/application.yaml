@@ -46,12 +46,11 @@ spring:
 #        locator:
 #          enabled: true
 #          lower-case-service-id: true
+  config:
+    import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8010/eureka
   instance:
     prefer-ip-address: true
-
-token:
-  signingKey: als7fa9sulkajJWEjri23rlaslkdjfaksjdfl;jasfjaksjfkaj23oj2lj34l2
