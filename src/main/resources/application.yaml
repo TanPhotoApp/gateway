@@ -14,15 +14,13 @@ spring:
             - Method=GET
 #            More predicates at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gateway-request-predicates-factories
           filters:
+#            More filters at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
             - RemoveRequestHeader=Cookie
 #            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
-#            More filters at https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
-#            https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
-#            https://cloud.spring.io/spring-cloud-gateway/reference/html/#httpheadersfilters
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
 eureka:
   client:
     service-url:
