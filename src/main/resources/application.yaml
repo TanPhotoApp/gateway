@@ -5,6 +5,8 @@ spring:
     name: gateway
   cloud:
     gateway:
+      default-filters:
+        - RemoveRequestHeader=Cookie
       routes:
         - id: user-status-check
           uri: lb://users-service
@@ -13,7 +15,6 @@ spring:
             - Method=GET
             - Header=Authorization, Bearer (.*)
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/users-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
         - id: user-service-signup
@@ -22,7 +23,6 @@ spring:
             - Path=/users-service/users
             - Method=POST
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/users-service/(?<segment>.*), /$\{segment}
         - id: user-service-login
           uri: lb://users-service
@@ -30,7 +30,6 @@ spring:
             - Path=/users-service/users/login
             - Method=POST
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/users-service/(?<segment>.*), /$\{segment}
         - id: user-service-get-update-delete
           uri: lb://users-service
@@ -39,10 +38,9 @@ spring:
             - Method=GET,PUT,DELETE
             - Header=Authorization, Bearer (.*)
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/users-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
-#      discovery:
+  #      discovery:
 #        locator:
 #          enabled: true
 #          lower-case-service-id: true
