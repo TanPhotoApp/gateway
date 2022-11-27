@@ -10,36 +10,36 @@ spring:
         - RemoveRequestHeader=Cookie
       routes:
         - id: user-status-check
-          uri: lb://users-service
+          uri: lb://user-service
           predicates:
-            - Path=/users-service/users/status/check
+            - Path=/user-service/users/status/check
             - Method=GET
             - Header=Authorization, Bearer (.*)
           filters:
-            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
         - id: user-service-signup
-          uri: lb://users-service
+          uri: lb://user-service
           predicates:
-            - Path=/users-service/users
+            - Path=/user-service/users
             - Method=POST
           filters:
-            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service-login
-          uri: lb://users-service
+          uri: lb://user-service
           predicates:
-            - Path=/users-service/users/login
+            - Path=/user-service/users/login
             - Method=POST
           filters:
-            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service-get-update-delete
-          uri: lb://users-service
+          uri: lb://user-service
           predicates:
-            - Path=/users-service/users
+            - Path=/user-service/users/**
             - Method=GET,PUT,DELETE
             - Header=Authorization, Bearer (.*)
           filters:
-            - RewritePath=/users-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
   #      discovery:
 #        locator:
