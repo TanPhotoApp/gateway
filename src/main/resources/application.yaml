@@ -54,16 +54,3 @@ spring:
 #          lower-case-service-id: true
   config:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8010/eureka
-  instance:
-    prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,beans
