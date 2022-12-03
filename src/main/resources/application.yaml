@@ -59,4 +59,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,mappings
+        include: health
