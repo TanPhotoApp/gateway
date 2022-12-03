@@ -54,6 +54,9 @@ spring:
 #          lower-case-service-id: true
   config:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
+  sleuth:
+    reactor:
+      instrumentation-type: decorate_queues
 
 management:
   endpoints:
