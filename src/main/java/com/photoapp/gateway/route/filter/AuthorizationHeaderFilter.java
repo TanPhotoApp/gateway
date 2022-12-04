@@ -13,6 +13,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Component
 @RefreshScope
@@ -20,6 +21,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     @Value("${token.signingKey}")
     private String signingKey;
+
+    public static class Config {
+
+    }
 
     /**
      * This constructor is required to let AbstractGatewayFilterFactory know which config class to cast
@@ -32,16 +37,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            var request = exchange.getRequest();
+            var validToken = Optional.ofNullable(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION))
+                .map(authHeader -> authHeader.get(0))
+                .map(authHeader -> authHeader.replace("Bearer ", ""))
+                .map(this::isValidToken)
+                .orElse(false);
 
-            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                return onError(exchange);
-            }
-
-            String authHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            String token = authHeader.replace("Bearer ", "");
-
-            if (!isValidToken(token)) {
+            if (!validToken) {
                 return onError(exchange);
             }
 
@@ -68,10 +70,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         var response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return response.setComplete();
-    }
-
-    public static class Config {
-
     }
 
 }
